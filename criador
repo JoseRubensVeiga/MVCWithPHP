@@ -1,0 +1,63 @@
+<?php 
+
+$br = '
+';
+
+
+if(! isset($argv[1])){
+	echo 'Insira um parâmetro';
+}
+if($argv[1] == 'controller'){
+	if(! isset($argv[2])){
+		echo 'insira o nome do controller' . "\n";
+	}elseif ($argv[2] != ''){
+		
+			if(isset($argv[3]) && $argv[3] == '-d'){
+				echo 'Deseja realmente excluir o Controller e Model ' . ucfirst($argv[2]) . "? S/N \n";
+				$resposta = fgets(STDIN);
+
+				
+					if(trim($resposta) == 's' || trim($resposta) == 'S'){
+						if(file_exists('app/Controllers/' . ucfirst($argv[2]) . 'Controller' . '.php'))
+							unlink('app/Controllers/' . ucfirst($argv[2]) . 'Controller' . '.php');
+						else
+							echo 'Controller ' . ucfirst($argv[2]) . 'Controller não existe' . "\n";
+						if(file_exists('app/Models/' . ucfirst($argv[2]) . '.php'))
+							unlink('app/Models/' . ucfirst($argv[2]) . '.php');
+						else
+							echo 'Model ' . ucfirst($argv[2]) . ' não existe' . "\n";
+					}
+				
+			}else{
+
+			if(isset($argv[3]) && $argv[3] == '-m'){
+
+			$conteudo_model = '<?php' . $br . $br; 
+			$conteudo_model .= 'namespace App\Models;' . $br;
+			$conteudo_model .= 'use App\Functions\Connection;' . $br . $br;
+			$conteudo_model .= 'class '. ucfirst($argv[2]) .' extends Model{' . $br . $br;
+			$conteudo_model .= '}';
+
+				if(file_exists('app/Models/' . ucfirst($argv[2]) . '.php')){
+	     		echo 'Model já existente' . "\n";
+		     	}else{
+		     		file_put_contents('app/Models/' . ucfirst($argv[2]) . '.php', $conteudo_model);
+			echo 'Model ' . ucfirst($argv[2]) . ' criado' . "\n";
+		     	}
+			}
+
+		$conteudo = '<?php' . $br . $br;
+		$conteudo .= 'class ' . ucfirst($argv[2]) . 'Controller' . '{' . $br . $br;
+		$conteudo .= '}';
+
+	     	if(file_exists('app/Controllers/' . ucfirst($argv[2]) . 'Controller.php')){
+	     		echo 'Controller já existente' . "\n";
+	     	}else{
+	     		file_put_contents('app/Controllers/' . ucfirst($argv[2]) . 'Controller' . '.php', $conteudo);
+	     		echo 'Controller Criado' . "\n";
+	     	}
+
+}
+		}
+	
+}
